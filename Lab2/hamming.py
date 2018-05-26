@@ -11,15 +11,16 @@ import sys
 from math import *
 import random
 
-raw_array = []
-hamming_array = []
+dataword_array = []
+codeword_array = []
 numOnes = -1
-goodToGo=0
+goodToGo=0 #bit to check if string is 10 or 14 chars long
+randError = 1 #bit for turning on random error insertion
 
 while(goodToGo==0):
 	#binary_string = '0110100111'
-	binary_string = '11011101100111'
-	#binary_string = input("Enter binary string (of length 10) or code word (of length 14): ") #input works as raw_import for python 3.x 
+	#binary_string = '11011101100111'
+	binary_string = input("Enter binary string (of length 10) or code word (of length 14): ") #input works as raw_import for python 3.x 
 	if len(binary_string) == 10 or len(binary_string) == 14:
 		goodToGo = 1
 	else:
@@ -41,106 +42,201 @@ def isEven(binary_substr):
 if len(binary_string) == 10:
 	print('\n\n\tPart A:\n')
 	for char in binary_string:
-		raw_array.append(char)
+		dataword_array.append(char)
 
 	for x in range(0, 14):
-		hamming_array.append('null')
+		codeword_array.append('null')
 		
-	print('\n\nBefore populating:\n',hamming_array)
+	print('\n\nBefore populating:\n',codeword_array)
 	try:
-		#hamming_array[0] = 
-		#hamming_array[1] = 
-		hamming_array[2] = raw_array[0]
-		#hamming_array[3] = 
-		hamming_array[4] = raw_array[1]
-		hamming_array[5] = raw_array[2]
-		hamming_array[6] = raw_array[3]
-		#hamming_array[7] = 
-		hamming_array[8] = raw_array[4]
-		hamming_array[9] = raw_array[5]
-		hamming_array[10] = raw_array[6]
-		hamming_array[11] = raw_array[7]
-		hamming_array[12] = raw_array[8]
-		hamming_array[13] = raw_array[9]
-
+		#codeword_array[0] = 
+		#codeword_array[1] = 
+		codeword_array[2] = dataword_array[0]
+		#codeword_array[3] = 
+		codeword_array[4] = dataword_array[1]
+		codeword_array[5] = dataword_array[2]
+		codeword_array[6] = dataword_array[3]
+		#codeword_array[7] = 
+		codeword_array[8] = dataword_array[4]
+		codeword_array[9] = dataword_array[5]
+		codeword_array[10] = dataword_array[6]
+		codeword_array[11] = dataword_array[7]
+		codeword_array[12] = dataword_array[8]
+		codeword_array[13] = dataword_array[9]
 	except Exception:
 		print('I dont really care')
 
-	print('After populating:\n',hamming_array)
+	print('After populating:\n',codeword_array)
 
 
 
 
 	#calc bit 8 
-	lazy = hamming_array[11] + hamming_array[12] + hamming_array[13] 
+	lazy = codeword_array[11] + codeword_array[12] + codeword_array[13] 
 	if (isEven(lazy)):
-		hamming_array[7] = '0'
+		codeword_array[7] = '0'
 	else:
-		hamming_array[7] = '1'
+		codeword_array[7] = '1'
 
 	#calc bit 4
-	lazy = hamming_array[6] + hamming_array[8] + hamming_array[9] + hamming_array[10]
+	lazy = codeword_array[6] + codeword_array[8] + codeword_array[9] + codeword_array[10]
 	if (isEven(lazy)):
-		hamming_array[3] = '0'
+		codeword_array[3] = '0'
 	else:
-		hamming_array[3] = '1'
+		codeword_array[3] = '1'
 
 	#calc bit 2
-	lazy = hamming_array[4] + hamming_array[5] + hamming_array[9] + hamming_array[10] + hamming_array[13]
+	lazy = codeword_array[4] + codeword_array[5] + codeword_array[9] + codeword_array[10] + codeword_array[13]
 	if (isEven(lazy)):
-		hamming_array[1] = '0'
+		codeword_array[1] = '0'
 	else:
-		hamming_array[1] = '1'
+		codeword_array[1] = '1'
 
 	#calc bit 1
-	lazy = hamming_array[2] + hamming_array[5] + hamming_array[8] + hamming_array[10] + hamming_array[12]
+	lazy = codeword_array[2] + codeword_array[5] + codeword_array[8] + codeword_array[10] + codeword_array[12]
 	if (isEven(lazy)):
-		hamming_array[0] = '0'
+		codeword_array[0] = '0'
 	else:
-		hamming_array[0] = '1'
+		codeword_array[0] = '1'
 
-	print('\nCode Word:\n', hamming_array)
-	print('Parity bits added:', hamming_array[0], hamming_array[1], hamming_array[3], hamming_array[7])
+	print('\nCode Word:\n', codeword_array)
+	print('Parity bits added:', codeword_array[0], codeword_array[1], codeword_array[3], codeword_array[7])
 
 if len(binary_string) == 14:
 	print('\n\n\tPart B:\n')
 
 	for char in binary_string:
-		hamming_array.append(char)
-	
+		codeword_array.append(char)
+	for x in range(0, 10):
+		dataword_array.append('null')
+	print(codeword_array)
 	#insert random error
-	errorBit = floor(random.random()*10+1)
+	if randError == 1:
+		errorBit = floor(random.random()*13+1)
 	
-	#make sure it only hits the original binary string
-	if errorBit == 1:
-		errorBit = 2
-	elif errorBit == 2:	
-		errorBit = 4
-	elif errorBit == 3:
-		errorBit = 5
-	elif errorBit == 4:
-		errorBit = 6
-	elif errorBit == 5:
-		errorBit = 8
-	elif errorBit == 6:
-		errorBit = 9
-	elif errorBit == 7:
-		errorBit = 10
-	elif errorBit == 8:
-		errorBit = 11
-	elif errorBit == 9:
-		errorBit = 12
-	elif errorBit == 10:
-		errorBit = 13
-	else:
-		print('error')
+		#make sure it only hits the original binary string
+		# if errorBit == 1:
+		# 	errorBit = 2
+		# elif errorBit == 2:	
+		# 	errorBit = 4
+		# elif errorBit == 3:
+		# 	errorBit = 5
+		# elif errorBit == 4:
+		# 	errorBit = 6
+		# elif errorBit == 5:
+		# 	errorBit = 8
+		# elif errorBit == 6:
+		# 	errorBit = 9
+		# elif errorBit == 7:
+		# 	errorBit = 10
+		# elif errorBit == 8:
+		# 	errorBit = 11
+		# elif errorBit == 9:
+		# 	errorBit = 12
+		# elif errorBit == 10:
+		# 	errorBit = 13
+		# else:
+		# 	print('error')
 
-	print('Error created at bit #: ',errorBit)
-	print('Before error:',hamming_array[errorBit])
-	if hamming_array[errorBit] =='0':
-		hamming_array[errorBit] ='1'
-	else:
-		hamming_array[errorBit] ='0'
-	print('After error:',hamming_array[errorBit])
+		print('Error created at bit #: ',errorBit+1)
+		print('Before error:',codeword_array[errorBit])
+		if codeword_array[errorBit] =='0':
+			codeword_array[errorBit] ='1'
+		else:
+			codeword_array[errorBit] ='0'
+		print('After error:',codeword_array[errorBit])
+		print(codeword_array)
 
-	#TODO: decode stuff
+	isEightCorrect = -1
+	isFourCorrect = -1
+	isTwoCorrect = -1
+	isOneCorrect = -1
+
+	#check parity bit 8
+	lazy = codeword_array[7] + codeword_array[11] + codeword_array[12] + codeword_array[13] 
+	if (isEven(lazy)):
+		isEightCorrect = 1
+		print('Bit 8 is correct')	
+	else:
+		isEightCorrect = 0
+		print('Bit 8 is incorrect')
+
+	#check parity bit 4
+	lazy = codeword_array[3] + codeword_array[6] + codeword_array[8] + codeword_array[9] + codeword_array[10] 
+	if (isEven(lazy)):
+		isFourCorrect = 1
+		print('Bit 4 is correct')
+		
+	else:
+		isFourCorrect = 0
+		print('Bit 4 is incorrect')
+
+	#check bit 2
+	lazy = codeword_array[1] + codeword_array[4] + codeword_array[5] + codeword_array[9] + codeword_array[10] + codeword_array[13] 
+	if (isEven(lazy)):
+		isTwoCorrect = 1
+		print('Bit 2 is correct')
+	else:
+		isTwoCorrect = 0
+		print('Bit 2 is incorrect')
+
+	#check bit 1
+	lazy = codeword_array[0]+ codeword_array[2] + codeword_array[5] + codeword_array[8] + codeword_array[10] + codeword_array[12]
+	if (isEven(lazy)):
+		isOneCorrect = 1
+		print('Bit 1 is correct')
+	else:
+		isOneCorrect = 0
+		print('Bit 1 is incorrect')
+
+	print('isEightCorrect:',isEightCorrect)
+	print('isFourCorrect:',isFourCorrect)
+	print('isTwoCorrect:',isTwoCorrect)
+	print('isOneCorrect:',isOneCorrect)
+
+	if isOneCorrect == 1:
+		if isTwoCorrect == 1:
+			if isFourCorrect == 1:
+				if isEightCorrect == 1:
+					print('No errors detected')
+				else:
+					print('Error found at bit 8 or 12')
+			else:
+				if isEightCorrect == 1:
+					print('Error found at bit 4 or 7')
+				else:
+					print('Error found at codeword[6 and 11?]')
+		else:
+			if isFourCorrect == 1:
+				if isEightCorrect == 1:
+					print('Error found at bit 2 or 5')
+				else:
+					print('Error found at bit 14')
+			else:
+				if isEightCorrect == 1:
+					print('Error found at bit 10')
+				else:
+					print('Error found at codeword[idk]')
+	else:
+		if isTwoCorrect == 1:
+			if isFourCorrect == 1:
+				if isEightCorrect == 1:
+					print('Error found at bit 1 or 3')
+				else:
+					print('Error found at bit 13')
+			else:
+				if isEightCorrect == 1:
+					print('Error found at bit 9')
+				else:
+					print('Error found at codeword[]')
+		else:
+			if isFourCorrect == 1:
+				if isEightCorrect == 1:
+					print('Error found at bit 6')
+				else:
+					print('Error found at bit 8')
+			else:
+				if isEightCorrect == 1:
+					print('Error found at bit 11')
+				else:
+					print('Error found at codeword[]')
